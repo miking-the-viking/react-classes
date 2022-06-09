@@ -1,71 +1,43 @@
-import { TickerApi } from '@react-classes/api';
 import React from 'react';
-import TickerInput from './components/TickerInput';
+import StockQuote from './components/StockQuote';
 
-console.log(process.env);
-const token = process.env['NX_API_TOKEN'];
-
-if (!token) throw Error('Missing API_TOKEN');
-
-const tickerApi = new TickerApi(token);
-
-type AppContentProps = {
-  load: (ticker: string) => void;
-  loading: boolean;
-  data: any;
+type AppState = {
+  showStockQuote: boolean;
+  data: null;
 };
-
-const AppContent: React.FC<AppContentProps> = ({ data, load, loading }) => {
-  return (
-    <div>
-      <h1>Stock Data</h1>
-      <TickerInput onSubmit={load} />
-      {loading && <div>Loading...</div>}
-      <h1>{data && JSON.stringify(data, null, '\n')}</h1>
-    </div>
-  );
-};
-
-const AppFunctionalComponent: React.FC = () => {
-  const { data, load, loading } = tickerApi.useGetTicker();
-  return <AppContent {...{ data, loading, load }} />;
-};
-
-class AppClassBased extends React.Component<
-  any,
-  { data: any; loading: boolean }
-> {
+class AppClassBased extends React.Component<any, AppState> {
   constructor(props: any) {
     super(props);
-    this.submit = this.submit.bind(this);
-    this.state = { data: null, loading: false };
+    this.state = { showStockQuote: true, data: null };
+    this.toggleShowStockQuote = this.toggleShowStockQuote.bind(this);
   }
 
-  submit(ticker: string) {
-    (async () => {
-      this.setState((prev) => ({ ...prev, loading: true }));
-
-      try {
-        const tickerInformation = await tickerApi.getTicker(ticker);
-        this.setState({
-          data: tickerInformation,
-          loading: false,
-        });
-      } catch (e) {
-        console.log('There was an issue: ', e);
-      }
-
-      this.setState((prev) => ({ ...prev, loading: false }));
-    })();
+  toggleShowStockQuote() {
+    this.setState((prev) => ({ showStockQuote: !prev.showStockQuote }));
   }
 
   render() {
     return (
-      <AppContent
-        data={this.state.data}
-        load={this.submit}
-        loading={this.state.loading}
-      />
+      <>
+        <button onClick={this.toggleShowStockQuote}>
+          Toggle Show Stock Quote to:{' '}
+          {JSON.stringify(!this.state.showStockQuote)}
+        </button>
+        {this.state.showStockQuote && (
+          <>
+            <StockQuote
+              setData={(data) => {
+                console.log('setData running');
+                this.setState((prev) => ({ ...prev, data }));
+              }}
+            />
+            <hr />
+          </>
+        )}
+        <h1>
+          {this.state.data && JSON.stringify(this.state.data, null, '\n')}
+        </h1>
+      </>
     );
   }
 }
