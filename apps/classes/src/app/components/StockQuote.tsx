@@ -1,6 +1,8 @@
 import { TickerApi } from '@react-classes/api';
-import React from 'react';
+import React, { useMemo } from 'react';
 import TickerInput from './TickerInput';
+import { Column, useTable } from 'react-table';
+import { Ticker } from '../TickerData.interface';
 
 console.log(process.env);
 const token = process.env['NX_API_TOKEN'];
@@ -12,7 +14,17 @@ const tickerApi = new TickerApi(token);
 type StockQuoteContentProps = {
   load: (ticker: string) => void;
   loading: boolean;
-  data: any;
+  data: Ticker;
+};
+
+const COLUMNS_LABELS: Partial<Record<keyof Ticker, string>> = {
+  currency: 'Currency',
+  day_high: 'Day High',
+  day_low: 'Day Low',
+  name: 'Name',
+  price: 'Price',
+  volume: 'Volume',
+  previous_close_price: 'Previous close price',
 };
 
 const StockQuoteContent: React.FC<StockQuoteContentProps> = ({
@@ -20,12 +32,88 @@ const StockQuoteContent: React.FC<StockQuoteContentProps> = ({
   load,
   loading,
 }) => {
+  const columns = useMemo(() => {
+    return Object.entries(COLUMNS_LABELS).map(([accessor, Header]) => ({
+      accessor,
+      Header,
+    })) as Column<Ticker>[];
+  }, []);
+
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    useTable<Ticker>({ columns, data: data ? [data] : [] });
+
   return (
     <div>
       <h1>Stock Data</h1>
       <TickerInput onSubmit={load} />
       {loading && <div>Loading...</div>}
-      <h1>{data && JSON.stringify(data, null, '\n')}</h1>
+      <table {...getTableProps()}>
+        <thead>
+          {
+            // Loop over the header rows
+
+            headerGroups.map((headerGroup) => (
+              // Apply the header row props
+
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {
+                  // Loop over the headers in each row
+
+                  headerGroup.headers.map((column) => (
+                    // Apply the header cell props
+
+                    <th {...column.getHeaderProps()}>
+                      {
+                        // Render the header
+
+                        column.render('Header')
+                      }
+                    </th>
+                  ))
+                }
+              </tr>
+            ))
+          }
+        </thead>
+
+        {/* Apply the table body props */}
+
+        <tbody {...getTableBodyProps()}>
+          {
+            // Loop over the table rows
+
+            rows.map((row) => {
+              // Prepare the row for display
+
+              prepareRow(row);
+
+              return (
+                // Apply the row props
+
+                <tr {...row.getRowProps()}>
+                  {
+                    // Loop over the rows cells
+
+                    row.cells.map((cell) => {
+                      // Apply the cell props
+
+                      return (
+                        <td {...cell.getCellProps()}>
+                          {
+                            // Render the cell contents
+
+                            cell.render('Cell')
+                          }
+                        </td>
+                      );
+                    })
+                  }
+                </tr>
+              );
+            })
+          }
+        </tbody>
+      </table>
     </div>
   );
 };
