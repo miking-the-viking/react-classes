@@ -1,9 +1,10 @@
 import React from 'react';
 import StockQuote from './components/StockQuote';
+import { Ticker } from './TickerData.interface';
 
 type AppState = {
   showStockQuote: boolean;
-  data: null;
+  data: Ticker[] | null;
 };
 class AppClassBased extends React.Component<any, AppState> {
   constructor(props: any) {
@@ -28,7 +29,12 @@ class AppClassBased extends React.Component<any, AppState> {
             <StockQuote
               setData={(data) => {
                 console.log('setData running');
-                this.setState((prev) => ({ ...prev, data }));
+                this.setState((prev) => {
+                  return {
+                    ...prev,
+                    data: prev.data ? [...prev.data, data] : [data],
+                  };
+                });
               }}
             />
             <hr />
