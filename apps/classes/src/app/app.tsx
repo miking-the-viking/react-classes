@@ -1,11 +1,13 @@
 import React from 'react';
 import StockQuote from './components/StockQuote';
+import TickerTable from './components/TickerTable';
 import { Ticker } from './TickerData.interface';
 
 type AppState = {
   showStockQuote: boolean;
   data: Ticker[] | null;
 };
+
 class AppClassBased extends React.Component<any, AppState> {
   constructor(props: any) {
     super(props);
@@ -40,9 +42,12 @@ class AppClassBased extends React.Component<any, AppState> {
             <hr />
           </>
         )}
-        <h1>
-          {this.state.data && JSON.stringify(this.state.data, null, '\n')}
-        </h1>
+        {this.state.data && (
+          <>
+            <h1>Historical Calls</h1>
+            <TickerTable data={this.state.data} />
+          </>
+        )}
       </>
     );
   }
