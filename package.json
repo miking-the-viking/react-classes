@@ -9,10 +9,12 @@
   },
   "private": true,
   "dependencies": {
+    "@reduxjs/toolkit": "^1.8.2",
     "core-js": "^3.6.5",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "react-is": "18.1.0",
+    "react-redux": "^8.0.2",
     "react-table": "^7.8.0",
     "regenerator-runtime": "0.13.7",
     "styled-components": "5.3.5",

@@ -2,8 +2,9 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import StockQuote from './components/StockQuote';
 import TickerTable from './components/TickerTable';
-import { RootState } from './store';
+import store, { RootState } from './store';
 import { Ticker } from './TickerData.interface';
+import { add } from '../tickerSlice';
 
 type AppState = {
   showStockQuote: boolean;
@@ -13,9 +14,11 @@ const stateToProps = (state: RootState) => {
   const tickers = state.ticker.data;
   return { data: tickers };
 };
-
-const mapDispatch = {
-  add: (payload: Ticker) => ({ type: 'add', payload }),
+// () => dispatch({ type: 'INCREMENT' })
+const mapDispatch = (dispatch: typeof store.dispatch) => {
+  return {
+    add: (payload: Ticker) => dispatch(add(payload)),
+  };
 };
 
 const connector = connect(stateToProps, mapDispatch);
@@ -51,10 +54,10 @@ class AppClassBased extends React.Component<PropsFromRedux, AppState> {
             <hr />
           </>
         )}
-        {true && (
+        {this.props.data && (
           <>
             <h1>Historical Calls</h1>
-            <TickerTable data={[]} />
+            <TickerTable data={this.props.data} />
           </>
         )}
       </>
