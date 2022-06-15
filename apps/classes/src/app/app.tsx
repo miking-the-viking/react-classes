@@ -2,9 +2,9 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import StockQuote from './components/StockQuote';
 import TickerTable from './components/TickerTable';
-import store, { RootState } from './store';
+import store, { RootState } from './store/store';
 import { Ticker } from './TickerData.interface';
-import { add } from '../tickerSlice';
+import { add } from './store/tickerSlice';
 
 type AppState = {
   showStockQuote: boolean;

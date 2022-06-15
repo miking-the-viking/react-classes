@@ -1,5 +1,5 @@
 import { CaseReducer, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Ticker } from './app/TickerData.interface';
+import { Ticker } from '../TickerData.interface';
 
 export type State = { data: Ticker[] | null };
 
