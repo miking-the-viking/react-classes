@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Button from 'react-bootstrap/Button';
 import StockQuote from './components/StockQuote';
 import TickerTable from './components/TickerTable';
 import { useAppDispatch, useAppSelector } from './store/store';
@@ -12,13 +13,14 @@ const App2: React.FC = () => {
 
   return (
     <>
-      <button
+      <Button
         onClick={() => {
           setShowStockQuote((prev) => !prev);
         }}
       >
         Toggle Show Stock Quote to: {JSON.stringify(!showStockQuote)}
-      </button>
+      </Button>
+
       {showStockQuote && (
         <>
           <StockQuote

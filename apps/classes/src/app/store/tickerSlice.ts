@@ -7,7 +7,7 @@ const addTicker: CaseReducer<State, PayloadAction<Ticker>> = (
   state,
   action
 ) => {
-  state.data = state.data ? [...state.data, action.payload] : [action.payload];
+  state.data = state.data ? [action.payload, ...state.data] : [action.payload];
 };
 
 const initialState: State = { data: null };

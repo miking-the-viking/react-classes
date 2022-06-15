@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import Table from 'react-bootstrap/Table';
 import { Column, useTable } from 'react-table';
 import { Ticker } from '../TickerData.interface';
 
@@ -38,7 +39,14 @@ const TickerTable: React.FC<{ data: Ticker[] }> = ({ data }) => {
     useTable<Ticker>({ columns, data });
 
   return (
-    <table {...getTableProps()}>
+    <Table
+      responsive
+      striped
+      bordered
+      hover
+      variant="dark"
+      {...getTableProps()}
+    >
       <thead>
         {
           // Loop over the header rows
@@ -104,7 +112,7 @@ const TickerTable: React.FC<{ data: Ticker[] }> = ({ data }) => {
           })
         }
       </tbody>
-    </table>
+    </Table>
   );
 };
 

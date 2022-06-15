@@ -5,6 +5,10 @@ import TickerTable from './components/TickerTable';
 import store, { RootState } from './store/store';
 import { Ticker } from './TickerData.interface';
 import { add } from './store/tickerSlice';
+import Button from 'react-bootstrap/Button';
+import Container from 'react-bootstrap/Container';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 
 type AppState = {
   showStockQuote: boolean;
@@ -37,28 +41,39 @@ class AppClassBased extends React.Component<PropsFromRedux, AppState> {
 
   render() {
     return (
-      <>
-        <button onClick={this.toggleShowStockQuote}>
-          Toggle Show Stock Quote to:{' '}
-          {JSON.stringify(!this.state.showStockQuote)}
-        </button>
+      <Container fluid>
+        <Row>
+          <Col>
+            <Button onClick={this.toggleShowStockQuote}>
+              Toggle Show Stock Quote to:{' '}
+              {JSON.stringify(!this.state.showStockQuote)}
+            </Button>
+          </Col>
+        </Row>
+
         {this.state.showStockQuote && (
-          <>
-            <StockQuote
-              setData={(data) => {
-                this.props.add(data);
-              }}
-            />
-            <hr />
-          </>
+          <Row>
+            <Col>
+              <StockQuote
+                setData={(data) => {
+                  this.props.add(data);
+                }}
+              />
+            </Col>
+          </Row>
         )}
         {this.props.data && (
-          <>
-            <h1>Historical Calls</h1>
-            <TickerTable data={this.props.data} />
-          </>
+          <Row>
+            <hr />
+            <Col xs={12}>
+              <h1>Historical Calls</h1>
+            </Col>
+            <Col xs={12}>
+              <TickerTable data={this.props.data} />
+            </Col>
+          </Row>
         )}
-      </>
+      </Container>
     );
   }
 }

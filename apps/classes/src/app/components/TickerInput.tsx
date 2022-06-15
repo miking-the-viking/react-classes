@@ -1,4 +1,5 @@
 import React from 'react';
+import Form from 'react-bootstrap/Form';
 
 type TickerInputProps = {
   onSubmit: (ticker: string) => void;
@@ -6,21 +7,27 @@ type TickerInputProps = {
 class TickerInput extends React.Component<TickerInputProps> {
   constructor(props: TickerInputProps) {
     super(props);
-    this.onKeyUp = this.onKeyUp.bind(this);
-  }
-
-  onKeyUp(keyboardEvent: React.KeyboardEvent<HTMLInputElement>) {
-    if (keyboardEvent.code === 'Enter') {
-      this.props.onSubmit(keyboardEvent.currentTarget.value);
-    }
   }
 
   render() {
     return (
-      <label>
-        Ticker:
-        <input type="text" onKeyUp={this.onKeyUp} />
-      </label>
+      <Form
+        onSubmit={(
+          e: React.FormEvent<HTMLFormElement> & {
+            target: {
+              ticker: HTMLInputElement;
+            };
+          }
+        ) => {
+          e.preventDefault();
+          this.props.onSubmit(e.target.ticker.value);
+        }}
+      >
+        <Form.Group>
+          <Form.Label>Ticker: </Form.Label>
+          <Form.Control type="text" id="ticker" />
+        </Form.Group>
+      </Form>
     );
   }
 }

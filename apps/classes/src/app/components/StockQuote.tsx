@@ -1,8 +1,12 @@
 import { TickerApi } from '@react-classes/api';
 import React, { useEffect } from 'react';
+import Row from 'react-bootstrap/Row';
+import Container from 'react-bootstrap/Container';
+import Spinner from 'react-bootstrap/Spinner';
 import { Ticker } from '../TickerData.interface';
 import TickerInput from './TickerInput';
 import TickerTable from './TickerTable';
+import Col from 'react-bootstrap/Col';
 
 console.log(process.env);
 const token = process.env['NX_API_TOKEN'];
@@ -23,12 +27,22 @@ const StockQuoteContent: React.FC<StockQuoteContentProps> = ({
   loading,
 }) => {
   return (
-    <div>
-      <h1>Stock Data</h1>
-      <TickerInput onSubmit={load} />
-      {loading && <div>Loading...</div>}
-      <TickerTable data={data ? [data] : []} />
-    </div>
+    <Row>
+      <Col sm={12}>
+        <h1>Stock Data</h1>
+      </Col>
+
+      <Col sm={12}>
+        <TickerInput onSubmit={load} />
+      </Col>
+      <Col sm={12}>
+        {loading ? (
+          <Spinner animation="grow" />
+        ) : (
+          <TickerTable data={data ? [data] : []} />
+        )}
+      </Col>
+    </Row>
   );
 };
 
