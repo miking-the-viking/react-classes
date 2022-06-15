@@ -68,11 +68,12 @@ class StockQuoteClassBased extends React.Component<
 
       try {
         const tickerInformation = await tickerApi.getTicker(ticker);
+        if (!tickerInformation) return;
         console.log('got ticker data,  updating state', tickerInformation);
-        this.setState({
-          data: tickerInformation,
+        this.setState((prev) => ({
+          data: tickerInformation ?? null,
           loading: false,
-        });
+        }));
         if (this.unmounting) return;
         this.props.setData(tickerInformation);
       } catch (e) {

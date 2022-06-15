@@ -12,6 +12,9 @@ export class TickerApi {
     );
     const { data } = await response.json();
 
+    if (!data || data.length === 0) {
+      return null;
+    }
     const tickerInformation = data[0];
     return tickerInformation;
   }
@@ -28,6 +31,8 @@ export class TickerApi {
         try {
           const data = await this.getTicker(ticker);
           if (!unmounted) setLoading(false);
+
+          if (!data) return;
           setData(data);
         } catch (e) {
           console.log('Error getting data', e);
