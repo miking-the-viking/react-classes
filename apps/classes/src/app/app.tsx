@@ -14,7 +14,7 @@ const stateToProps = (state: RootState) => {
   const tickers = state.ticker.data;
   return { data: tickers };
 };
-// () => dispatch({ type: 'INCREMENT' })
+
 const mapDispatch = (dispatch: typeof store.dispatch) => {
   return {
     add: (payload: Ticker) => dispatch(add(payload)),
@@ -36,7 +36,6 @@ class AppClassBased extends React.Component<PropsFromRedux, AppState> {
   }
 
   render() {
-    console.log('props: ', this.props);
     return (
       <>
         <button onClick={this.toggleShowStockQuote}>
@@ -47,7 +46,6 @@ class AppClassBased extends React.Component<PropsFromRedux, AppState> {
           <>
             <StockQuote
               setData={(data) => {
-                console.log('setData running');
                 this.props.add(data);
               }}
             />
